@@ -42,8 +42,8 @@ table/
 
 ~~~mermaid
 flowchart TD
-    CAT[(Catalog)] -->MAN(Manifest)
-    CAT --> MET(Metadata)
+    CAT[(Catalog)] --> MET(Metadata)
+    MET --> MAN(Manifest)
     MET --> IDX(Indexes)
     MAN --> PAR(Data Files)
 
