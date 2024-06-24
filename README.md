@@ -146,6 +146,7 @@ flowchart TD
 
 ## Data Pipelines
 
+Reusable, 'pipeline-in-a-box', providing capabilities for scheduling, monitoring, authoring and 
 - reliable
 - readers/writers
 
@@ -156,15 +157,21 @@ Data pipelines split data into categories:
 - managed
 - published
 
+Leverage BigQuery for what [it was designed for](https://www.vldb.org/pvldb/vol13/p3461-melnik.pdf)  
+
 ## Workbench
 
-
+Workbench
 
 ## Governance
 
-- Metadata Catalog
-
-
+Metadata Catalog facilitating 
+- Data Discovery
+- Data Security
+- Ownership
+- Encryption
+- Form, provenance
+- Change tracking
 
 ## Quality Control
 
@@ -226,7 +233,7 @@ Approximately £500k per year.
 
 ## References
 
-[Dremel Paper](https://www.vldb.org/pvldb/vol13/p3461-melnik.pdf)
+[Dremel Paper](https://www.vldb.org/pvldb/vol13/p3461-melnik.pdf)  
 [Iceberg Internals](https://www.dremio.com/resources/guides/apache-iceberg-an-architectural-look-under-the-covers/)
 
 [Snowflake Query Optimizer](https://www.youtube.com/watch?v=CPWn1SZUZqE)
