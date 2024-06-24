@@ -231,7 +231,3 @@ Approximately £500k per year.
 
 [Snowflake Query Optimizer](https://www.youtube.com/watch?v=CPWn1SZUZqE)
 
-
-
-- Two currently supporting development of Ciral and HRV, other portals currently not getting much love. Change in how work is split currently has these guys working on the API layer as well as the Web Layer.
-- Four total probably isn't enough to move fast enough, but is enough to demonstrate value and sell that more would be beneficial to meeting the pace of change and customer needs.
