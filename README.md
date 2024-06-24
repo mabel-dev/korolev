@@ -4,9 +4,17 @@
 
 ## Context
 
+Disparate data systems.
 
+Thought-power and work-force from the various systems aligned to achieve common goals will result in better outcomes than either by themselves.
+
+Flaws with the approaches of each existing system provides an opportunity to build a better system.
+
+It should be made clear early that this may exist as parallel systems utilizing common tools and approaches with local embelishments to provide either technical separation or offer unique service offerings within an ecosystem, and this design does not force a single 'platform', rather a single stack with unification points.
 
 ## Design Goals
+
+The design of a data platform.
 
 - **Encourage Sharing**: Data is valuable when it can be analyzed and shared.
 - **Engineer Satisfaction**: Motivated engineers deliver better customer outcomes. Optimize for their experience.
@@ -16,6 +24,8 @@
 ## Scope and Purpose
 
 ### Purpose of this Document
+
+The purpose of this document is to describe how the opportunity to create a unified set of tools and common interfaces for the acquision, processing and publishing of data could be realized.
 
 ### Scope
 
@@ -119,24 +129,42 @@ Mabel, Flows, Opteryx, Tarchia, Explorer
 ## Solution Overview
 
 
+~~~mermaid
+flowchart TD
+    USER(User) --> WB[Analyst Workbench]
+    subgraph Common Systems
+        WB --> CATALOG[Data Catalog]
+        WB --> BROKER[Data Broker]
+    end
+    subgraph Common Toolsets
+        BROKER --> DATA[Data]
+        PIPE[Pipelines] --> DATA
+    end
+~~~
 
 ### Affected Components
 
 ## Data Pipelines
+
+- reliable
+- readers/writers
+
+## Data Storage
 
 Data pipelines split data into categories:
 - raw [Postel's Law](https://en.wikipedia.org/wiki/Robustness_principle) - keep everything and only reject malicious data
 - managed
 - published
 
-## Data Storage
+## Workbench
 
+
+
+## Governance
 
 - Metadata Catalog
-- Data Reader/Writer
-- Console
-- Querying
-- Storage
+
+
 
 ## Quality Control
 
@@ -176,21 +204,25 @@ Estimates are based on observed performance and anticipated volumes:
 - Storage: 1 Petabyte (compressed approx 4/5ths) 200Tb = £4k
 
 £5000 per month
-(*), this is double the specification of the existing execution environment and 4x the execution time of the existing service.
+(*), this is double the current specification of the existing execution environment and 4x the execution time of the existing service, but as prices were rounded up to the nearest £1k it made no difference to the cost estimate.
 
 ## Options
 
 ### Google Data Stack
 
-- BigQuery £35k per month (150 Tb querying)
-- BigQuery £32k per month (800 Slots)
+- BigQuery £45k per month (150 Tb interactive querying, 1 Pb processing)
+- BigQuery £46k per month (1600 Slots)
+
+Assuming all data in BigQuery as per current MVD.
+
+Approximately £500k per year.
 
 ## Security Considerations
 
 ## Risks
 
-- Infrastructure over Application advocates challenging approach
-
+- Infrastructure over Application advocates challenging approach.
+- Short-termism encouraging a buy-over-build, rather than a buy-for-value approach.
 
 ## References
 
@@ -198,3 +230,8 @@ Estimates are based on observed performance and anticipated volumes:
 [Iceberg Internals](https://www.dremio.com/resources/guides/apache-iceberg-an-architectural-look-under-the-covers/)
 
 [Snowflake Query Optimizer](https://www.youtube.com/watch?v=CPWn1SZUZqE)
+
+
+
+- Two currently supporting development of Ciral and HRV, other portals currently not getting much love. Change in how work is split currently has these guys working on the API layer as well as the Web Layer.
+- Four total probably isn't enough to move fast enough, but is enough to demonstrate value and sell that more would be beneficial to meeting the pace of change and customer needs.
