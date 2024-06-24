@@ -4,22 +4,18 @@
 
 ## Context
 
-Disparate data systems.
-
-Thought-power and work-force from the various systems aligned to achieve common goals will result in better outcomes than either by themselves.
-
-Flaws with the approaches of each existing system provides an opportunity to build a better system.
+The current landscape consists of disparate data systems. Aligning the efforts and expertise from these various systems to achieve common goals can lead to significantly better outcomes. The limitations and flaws in existing systems present an opportunity to build a superior, unified platform.
 
 It should be made clear early that this may exist as parallel systems utilizing common tools and approaches with local embelishments to provide either technical separation or offer unique service offerings within an ecosystem, and this design does not force a single 'platform', rather a single stack with unification points.
 
 ## Design Goals
 
-The design of a data platform.
+Designing an optimal data platform with the following goals:
 
-- **Encourage Sharing**: Data is valuable when it can be analyzed and shared.
-- **Engineer Satisfaction**: Motivated engineers deliver better customer outcomes. Optimize for their experience.
-- **Simplicity and Speed**: Build simple systems to deliver value quickly.
-- **Cost Efficiency**: Keep core systems low-cost, adding expenses only where they add value, so design for modularity.
+- **Encourage Sharing**: Maximize data value through easy analysis and sharing.
+- **Engineer Satisfaction**: Enhance engineer motivation to improve customer outcomes.
+- **Simplicity and Speed**: Develop simple systems for rapid value delivery.
+- **Cost Efficiency**: Maintain low-cost core systems, adding expenses only where they provide value, emphasizing modular design.
 
 ## Scope and Purpose
 
@@ -31,35 +27,32 @@ The purpose of this document is to describe how the opportunity to create a unif
 
 ## Problem Space
 
-This is not an exhaustive list of constraints and factors influencing technical direction.
+Key constraints and factors influencing technical direction:
 
-- Able to store and handle petabyte-sized datasets.
-- Reliable and durable storage
-- Data should be immutable
+- Support petabyte-scale datasets.
+- Ensure reliable and durable storage.
+- Maintain immutable data.
+- Detect and gracefully recover from job failures.
+- Optimize storage and compute costs
+- Ensure transparency, traceability, and auditability of all actions.
+- Mix of scheduled, event-based, and ad hoc data processing.
+- Majority of data processing will be repeatable.
 
-- Job failure will happen, it needs to be detected and gracefully recovered
-- Storage and Compute are going to be the biggest drivers of consumption costs
-- Data volumes will be in the order of hundreds of gigabytes
-- All actions affecting data must be transparent, traceable and auditable
-- Processing of data will be a mix of scheduled, event-based and ad hoc
-- The majority of data processing will be exactly the same every day
-- It is impractical to pull all data to the platform, at least some data will need to be pushed to the platform
-- End-user APIs and dashboards to view data from the platform will be required
-= Any business logic should be able to ported to other cloud platforms
-- Third-party components, whilst do some heavy lifting, generally come with maintenance obligations and tie-ins
+- Require end-user APIs and dashboards for data access.
 
+- Third-party components often come with maintenance obligations and tie-ins.
 
 ## Assumptions
 
 For the purposes of this document, it is reasonably assumed that:
 
-- Indexing datasets is not required (neither BigQuery nor [Snowflake](https://www.youtube.com/watch?v=CPWn1SZUZqE) index)
-- The services will be primarily written in Python, version 3.10 (or later) should be targeted.
-- The services will be hosted in Containers run in a Kubernetes-like environment.
-- There will be no access to the running or run workers beyond data outputs and logs.
-- Code will be managed on GitHub and functionality on that platform such as locked branches and Actions will be available.
-- The data will be stored on Google Cloud Storage and available to both read and write.
-- Someone else's R&D and opiniated service offering costs more to acquire and work with, than building a simple version of the same thing.
+- No need for dataset indexing (e.g., BigQuery, [Snowflake](https://www.youtube.com/watch?v=CPWn1SZUZqE)).
+- Target Python 3.10 or later for development.
+- Host services in containers within a Kubernetes-like environment.
+- No access to running workers; only data outputs and logs are accessible.
+- Manage code on GitHub, leveraging features like locked branches and Actions.
+- Store data on Google Cloud Storage with read/write access.
+- Building a simple version in-house is more cost-effective than adopting an existing, opinionated service.
 
 ## Principles
 
@@ -210,8 +203,9 @@ Estimates are based on observed performance and anticipated volumes:
 - Cloud Run (*): 100 thousand executions, 8 CPU, 16 Gb, 60 seconds = £1k
 - Storage: 1 Petabyte (compressed approx 4/5ths) 200Tb = £4k
 
-£5000 per month
-(*), this is double the current specification of the existing execution environment and 4x the execution time of the existing service, but as prices were rounded up to the nearest £1k it made no difference to the cost estimate.
+Approximately £60 per year
+
+> (*), this is double the current memory and CPU specification of the comparitor execution environment and 4x the execution time of the existing service, but as prices were rounded up to the nearest £1k it made no difference to the cost estimate.
 
 ## Options
 
