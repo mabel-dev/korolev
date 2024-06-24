@@ -1,15 +1,17 @@
 # Korolev - Moonshot Data Platform
+
 **Commiting ourselves, before this year is out, of building a high-performance, low-cost petabyte-scale data platform**
 
 ## Context
 
 
-## Goals
 
-- Simplify data sharing and usage.
-- Enable easy system modifications.
-- Rapidly build the system to deliver quick value.
-- Keep the core system low-cost, adding expenses only where it adds value.
+## Design Goals
+
+- **Encourage Sharing**: Data is valuable when it can be analyzed and shared.
+- **Engineer Satisfaction**: Motivated engineers deliver better customer outcomes. Optimize for their experience.
+- **Simplicity and Speed**: Build simple systems to deliver value quickly.
+- **Cost Efficiency**: Keep core systems low-cost, adding expenses only where they add value, so design for modularity.
 
 ## Scope and Purpose
 
@@ -21,9 +23,8 @@
 
 This is not an exhaustive list of constraints and factors influencing technical direction.
 
-- Able to store petabyte-sized datasets
+- Able to store and handle petabyte-sized datasets.
 - Reliable and durable storage
-- Able to integrate with other storage platforms
 - Data should be immutable
 
 - Job failure will happen, it needs to be detected and gracefully recovered
@@ -42,13 +43,13 @@ This is not an exhaustive list of constraints and factors influencing technical 
 
 For the purposes of this document, it is reasonably assumed that:
 
-- Indexing datasets is not required (neither BigQuery nor Snowflake index)
-- The services will be written in Python, version 3.10 (or later) should be targeted.
+- Indexing datasets is not required (neither BigQuery nor [Snowflake](https://www.youtube.com/watch?v=CPWn1SZUZqE) index)
+- The services will be primarily written in Python, version 3.10 (or later) should be targeted.
 - The services will be hosted in Containers run in a Kubernetes-like environment.
-- The data will be stored on Google Cloud Storage and available to both read and write.
 - There will be no access to the running or run workers beyond data outputs and logs.
 - Code will be managed on GitHub and functionality on that platform such as locked branches and Actions will be available.
-
+- The data will be stored on Google Cloud Storage and available to both read and write.
+- Someone else's R&D and opiniated service offering costs more to acquire and work with, than building a simple version of the same thing.
 
 ## Principles
 
@@ -77,6 +78,7 @@ For the purposes of this document, it is reasonably assumed that:
 - **Modularity**: Structure the system in a modular way to allow components to be updated or replaced without affecting the whole system.
 - **RESTful APIs**: Expose functionalities through RESTful APIs to standardize interactions and integrations.
 - **Separation of Concerns**: Clearly separate storage and compute functions to optimize resource usage and scalability.
+- **Encourage Flow**: Fewer systems, put work, code, documentation and tests in the same system.
 
 ## Quality Indicators
 
@@ -110,6 +112,9 @@ For the purposes of this document, it is reasonably assumed that:
 - Ensure that committed data remains readable and intact over time.
 - Retain all types of data (business data, system logs, and error logs) for specified retention periods, complying with data retention policies.
 
+## Prior Art
+
+Mabel, Flows, Opteryx, Tarchia, Explorer
 
 ## Solution Overview
 
@@ -118,6 +123,11 @@ For the purposes of this document, it is reasonably assumed that:
 ### Affected Components
 
 ## Data Pipelines
+
+Data pipelines split data into categories:
+- raw [Postel's Law](https://en.wikipedia.org/wiki/Robustness_principle) - keep everything and only reject malicious data
+- managed
+- published
 
 ## Data Storage
 
@@ -129,6 +139,8 @@ For the purposes of this document, it is reasonably assumed that:
 - Storage
 
 ## Quality Control
+
+The primary gateway for Quality is moving from the uncontrolled environment of the developer 
 
 Approach              | Purpose                          | Proposed Implementation
 --------------------- | -------------------------------- | ----------------------------
@@ -150,14 +162,39 @@ Maintainability       | Difficult to read code           | `radon`
 
 ## Cost Estimation
 
+Current usage of Explorer (30 days to 24 June 2024)
+
+**Unique users**: 31  
+**Queries**: 1015   
+**Average Execution**: 12.29 seconds  
+**Median Execution**: 2.25 seconds  
+**Processed Bytes**: 1.23 Tb  
+
+Estimates are based on observed performance and anticipated volumes: 
+
+- Cloud Run (*): 100 thousand executions, 8 CPU, 16 Gb, 60 seconds = £1k
+- Storage: 1 Petabyte (compressed approx 4/5ths) 200Tb = £4k
+
+£5000 per month
+(*), this is double the specification of the existing execution environment and 4x the execution time of the existing service.
+
+## Options
+
+### Google Data Stack
+
+- BigQuery £35k per month (150 Tb querying)
+- BigQuery £32k per month (800 Slots)
+
 ## Security Considerations
 
 ## Risks
 
-
+- Infrastructure over Application advocates challenging approach
 
 
 ## References
 
 [Dremel Paper](https://www.vldb.org/pvldb/vol13/p3461-melnik.pdf)
 [Iceberg Internals](https://www.dremio.com/resources/guides/apache-iceberg-an-architectural-look-under-the-covers/)
+
+[Snowflake Query Optimizer](https://www.youtube.com/watch?v=CPWn1SZUZqE)
