@@ -149,11 +149,11 @@ flowchart TD
 
 ### Primary Components
 
-## Analyst Workbench
+**Analyst Workbench**
 
 Workbench
 
-## Data Catalog
+**Data Catalog**
 
 Metadata Catalog facilitating 
 - Data Discovery
@@ -164,13 +164,16 @@ Metadata Catalog facilitating
 - Provenance
 - Change tracking
 
-## Data Broker
+**Data Broker**
 
 handles decryption for data in buckets
 
-## Pipelines
+**Pipelines**
 
-## Data Storage
+- idempotent (may cost storage)
+- backfill/replayable
+
+**Data Storage**
 
 Data pipelines split data into categories:
 - raw [Postel's Law](https://en.wikipedia.org/wiki/Robustness_principle) - keep everything and only reject malicious data
@@ -179,12 +182,34 @@ Data pipelines split data into categories:
 
 Leverage BigQuery for what [it was designed for](https://www.vldb.org/pvldb/vol13/p3461-melnik.pdf)  
 
+### Secondary Components
+
+Just as important as the primary components, but are generally not touchable outside the development and operations teams.
+
+- performance metrics
+- pipeline libraries
+- dynamic configuration
+
 ## Quality Control
 
 ### Data Quality
 
+**Active**
+
+- schema validation
+
+**Passive**
+
+- record counts
+- record durations
+
 ### Code Quality
 
+**Active**
+
+- execute jobs writing to a null-writer to exercise everything but the commit
+
+**Passive**
 
 The primary gateway for Quality is moving from the uncontrolled environment of the developer 
 
@@ -199,8 +224,6 @@ Dry Runs              | Test execution before deployment | -
 Weak Coding Practices | -                                | -
 Composition Analysis  | Poor maintenance                 | `bombast`, `trivy`
 Maintainability       | Difficult to read code           | `radon`
-
-
 
 ### Security
 
