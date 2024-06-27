@@ -2,6 +2,8 @@
 
 **Commiting ourselves, before this year is out, of building a high-performance, low-cost petabyte-scale data platform**
 
+The objective is to build a data platform to perform acquision, peristance, processing and publishing. This system will be a combination of bought and built components.
+
 ## Context
 
 The current landscape consists of disparate data systems. Aligning the efforts and expertise from these various systems to achieve common goals can lead to significantly better outcomes. The limitations and flaws in existing systems present an opportunity to build a superior, unified platform.
@@ -16,6 +18,8 @@ Designing an optimal data platform with the following goals:
 - **Engineer Satisfaction**: Enhance engineer motivation to improve customer outcomes.
 - **Simplicity and Speed**: Develop simple systems for rapid value delivery.
 - **Cost Efficiency**: Maintain low-cost core systems, adding expenses only where they provide value, emphasizing modular design.
+- **Reliable**: Reliable performance and behaviour, handling errors and failures.
+- **Support Automations**: All components are described in code, all functions are exposed as APIs.
 
 ## Scope and Purpose
 
@@ -29,36 +33,39 @@ The purpose of this document is to describe how the opportunity to create a unif
 
 Key constraints and factors influencing technical direction:
 
-- Support petabyte-scale datasets.
+- Support petabyte-scale datasets, with terabyte-scale daily loads.
 - Ensure reliable and durable storage.
-- Maintain immutable data.
+- Maintain immutable data, potentially used in legal procedures.
 - Detect and gracefully recover from job failures.
-- Optimize storage and compute costs
+- Optimize storage and compute costs.
 - Ensure transparency, traceability, and auditability of all actions.
 - Mix of scheduled, event-based, and ad hoc data processing.
 - Majority of data processing will be repeatable.
-
-- Require end-user APIs and dashboards for data access.
-
-- Third-party components often come with maintenance obligations and tie-ins.
+- Support real-time access to data via dashboards (including PowerBI), and analyst workbooks.
 
 ## Assumptions
 
 For the purposes of this document, it is reasonably assumed that:
 
-- No need for dataset indexing (e.g., BigQuery, [Snowflake](https://www.youtube.com/watch?v=CPWn1SZUZqE)).
+- There is no need for dataset indexing (e.g., BigQuery, [Snowflake](https://www.youtube.com/watch?v=CPWn1SZUZqE)).
 - Target Python 3.10 or later for development.
-- Host services in containers within a Kubernetes-like environment.
+- Compute will primarily be containers within a Kubernetes-like environment.
+- Multiple storage platforms will be used, balancing performance and cost.
 - No access to running workers; only data outputs and logs are accessible.
 - Manage code on GitHub, leveraging features like locked branches and Actions.
-- Store data on Google Cloud Storage with read/write access.
-- Building a simple version in-house is more cost-effective than adopting an existing, opinionated service.
+- Building a simple version in-house is faster and cost-effective than adopting an existing, opinionated service.
+
+## Constraints
+
+It is believed these are immutable things:
+
+- BigQuery must be used as the store for data exposed to dashboards.
 
 ## Principles
 
 ### Warehouse
 
-- **Scalability**: Design for growth, ensuring the system can handle increasing volumes of data without significant performance degradation.
+- **Scalability**: Design for growth, ensuring the system can handle increasing volumes of data without significant performance degradation or cost escalation.
 - **Flexibility**: Support diverse data types and formats, enabling a wide range of analytical tasks.
 - **Efficiency**: Optimize storage and retrieval processes to minimize costs and improve performance.
 
@@ -115,33 +122,53 @@ For the purposes of this document, it is reasonably assumed that:
 - Ensure that committed data remains readable and intact over time.
 - Retain all types of data (business data, system logs, and error logs) for specified retention periods, complying with data retention policies.
 
-## Prior Art
+### Tracibility
 
-Mabel, Flows, Opteryx, Tarchia, Explorer
+- Ensure all data is able to be traced through the system (e.g. this version of the code operated on this version of the data)
 
 ## Solution Overview
 
-
 ~~~mermaid
 flowchart TD
+    ESI(Dashboards) --> BQ
     USER(User) --> WB[Analyst Workbench]
-    subgraph Common Systems
-        WB --> CATALOG[Data Catalog]
-        WB --> BROKER[Data Broker]
+    WB --> CATALOG[Data Catalog]
+    WB --> BROKER[Data Broker]
+    WB --> PIPE[Pipelines]
+    PIPE --> BROKER
+    subgraph storage
+        CATALOG
+        BROKER --> DATA[LTS]
+        BROKER --> BQ[BigQuery]
     end
-    subgraph Common Toolsets
-        BROKER --> DATA[Data]
-        PIPE[Pipelines] --> DATA
+    subgraph consumers
+        ESI
+        USER
     end
 ~~~
 
-### Affected Components
+### Primary Components
 
-## Data Pipelines
+## Analyst Workbench
 
-Reusable, 'pipeline-in-a-box', providing capabilities for scheduling, monitoring, authoring and 
-- reliable
-- readers/writers
+Workbench
+
+## Data Catalog
+
+Metadata Catalog facilitating 
+- Data Discovery
+- Data Security
+- Ownership
+- Encryption
+- Form
+- Provenance
+- Change tracking
+
+## Data Broker
+
+handles decryption for data in buckets
+
+## Pipelines
 
 ## Data Storage
 
@@ -152,21 +179,12 @@ Data pipelines split data into categories:
 
 Leverage BigQuery for what [it was designed for](https://www.vldb.org/pvldb/vol13/p3461-melnik.pdf)  
 
-## Workbench
-
-Workbench
-
-## Governance
-
-Metadata Catalog facilitating 
-- Data Discovery
-- Data Security
-- Ownership
-- Encryption
-- Form, provenance
-- Change tracking
-
 ## Quality Control
+
+### Data Quality
+
+### Code Quality
+
 
 The primary gateway for Quality is moving from the uncontrolled environment of the developer 
 
@@ -181,8 +199,6 @@ Dry Runs              | Test execution before deployment | -
 Weak Coding Practices | -                                | -
 Composition Analysis  | Poor maintenance                 | `bombast`, `trivy`
 Maintainability       | Difficult to read code           | `radon`
-
-### Functional
 
 
 
@@ -203,20 +219,26 @@ Estimates are based on observed performance and anticipated volumes:
 - Cloud Run (*): 100 thousand executions, 8 CPU, 16 Gb, 60 seconds = £1k
 - Storage: 1 Petabyte (compressed approx 4/5ths) 200Tb = £4k
 
-Approximately £60 per year
+Approximately £60k per annum at the upper end of the estimate. 
 
 > (*), this is double the current memory and CPU specification of the comparitor execution environment and 4x the execution time of the existing service, but as prices were rounded up to the nearest £1k it made no difference to the cost estimate.
+
+Anticipated most likely scenario is 10x longer queries to to data volumes and fewer queries per month; scaling just the number of queries to 50k/mo, the cost estimate remains the same - primarily due to the small numbers involved rounding up to £1k per month.
 
 ## Options
 
 ### Google Data Stack
+
+Focusng on BigQuery as the largest part of the experience and cost differentiation.
 
 - BigQuery £45k per month (150 Tb interactive querying, 1 Pb processing)
 - BigQuery £46k per month (1600 Slots)
 
 Assuming all data in BigQuery as per current MVD.
 
-Approximately £500k per year.
+Approximately £500k per annum at the lower end of the estimate.
+
+This assumes a flat growth of data per query, what is more likely is some datasets will be many terabytes themselves, so rather than queries processing 10s of gigabytes as per Explorer today, some queries will be processing 10s of terabytes. Approximating this to 10 Pb of data accessed in queries is £1.740 million per annum.
 
 ## Security Considerations
 
