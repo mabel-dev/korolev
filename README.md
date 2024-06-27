@@ -187,8 +187,15 @@ Leverage BigQuery for what [it was designed for](https://www.vldb.org/pvldb/vol1
 Just as important as the primary components, but are generally not touchable outside the development and operations teams.
 
 - performance metrics
+    are we tending toward failure, what is the slow part
+- alerting
+    when there's problems, we should know
 - pipeline libraries
+    error handling, logging, performance, all taken care of for data engineers
 - dynamic configuration
+    configuration should not be baked into code or repositories unless it is specific to that code
+- code abstractions
+    engineers want to access data, not care about where it is hosted
 
 ## Quality Control
 
