@@ -265,10 +265,10 @@ Maintainability       | Difficult to read code           | `radon`
 Current usage of Explorer (30 days to 24 June 2024)
 
 **Unique users**: 33  
-**Queries**: 1025   
-**Average Execution**: 10.63 seconds  
-**Median Execution**: 2.13 seconds  
-**Processed Bytes**: 0.98 Tb  
+**Queries**: 1050   
+**Average Execution**: 10.51 seconds  
+**Median Execution**: 2.20 seconds  
+**Processed Bytes**: 0.99 Tb  
 
 Estimates are based on observed performance and anticipated volumes: 
 
