@@ -20,6 +20,7 @@ Designing an optimal data platform with the following goals:
 - **Cost Efficiency**: Maintain low-cost core systems, adding expenses only where they provide value, emphasizing modular design.
 - **Reliable**: Reliable performance and behaviour, handling errors and failures.
 - **Support Automations**: All components are described in code, all functions are exposed as APIs.
+- **User Abstraction**: Users shouldn't be forced to change behaviours based on internal implementations.
 
 ## Scope and Purpose
 
@@ -28,6 +29,9 @@ Designing an optimal data platform with the following goals:
 The purpose of this document is to describe how the opportunity to create a unified set of tools and common interfaces for the acquision, processing and publishing of data could be realized.
 
 ### Scope
+
+The system will be used as the primary data platform for CSO, it must support
+
 
 ## Problem Space
 
@@ -151,7 +155,7 @@ flowchart TD
 
 **Analyst Workbench**
 
-Workbench
+The design and implementation of the workbench is not part of this document, however, the interfaces to build pipelines and 
 
 **Data Catalog**
 
@@ -166,12 +170,34 @@ Metadata Catalog facilitating
 
 **Data Broker**
 
-handles decryption for data in buckets
+Data federation, single interface for various data source.
+
+Enforcement point for access permissions and perform decryption for authorized users.
+
+~~~mermaid
+sequenceDiagram
+    User->>+Broker: Get data
+    Broker->>+Catalog: Where is this data
+    Catalog-->>-Broker: It's here +perms +schema
+    Broker-->>+Store: Retrive Data
+    Store-->>-Broker: Here's the data
+    Broker->>-User: Here's your data
+~~~
 
 **Pipelines**
 
+_development_
+
+- toolset does logging, retries
+- unit testable
+
+_operations_
+
 - idempotent (may cost storage)
 - backfill/replayable
+- pausable
+- observable
+- step failure doesn't kill entire workflow
 
 **Data Storage**
 
@@ -208,7 +234,7 @@ Just as important as the primary components, but are generally not touchable out
 **Passive**
 
 - record counts
-- record durations
+- job durations
 
 ### Code Quality
 
@@ -238,11 +264,11 @@ Maintainability       | Difficult to read code           | `radon`
 
 Current usage of Explorer (30 days to 24 June 2024)
 
-**Unique users**: 31  
-**Queries**: 1015   
-**Average Execution**: 12.29 seconds  
-**Median Execution**: 2.25 seconds  
-**Processed Bytes**: 1.23 Tb  
+**Unique users**: 33  
+**Queries**: 1025   
+**Average Execution**: 10.63 seconds  
+**Median Execution**: 2.13 seconds  
+**Processed Bytes**: 0.98 Tb  
 
 Estimates are based on observed performance and anticipated volumes: 
 
@@ -268,7 +294,7 @@ Assuming all data in BigQuery as per current MVD.
 
 Approximately £500k per annum at the lower end of the estimate.
 
-This assumes a flat growth of data per query, what is more likely is some datasets will be many terabytes themselves, so rather than queries processing 10s of gigabytes as per Explorer today, some queries will be processing 10s of terabytes. Approximating this to 10 Pb of data accessed in queries is £1.740 million per annum.
+This assumes a flat growth of data per query, what is more likely is some datasets will be many terabytes themselves, so rather than queries processing 10s of gigabytes as per Explorer today, some queries will be processing 10s of terabytes. Approximating this to 10 Pb of data accessed in queries is £1.74 million per annum.
 
 ## Security Considerations
 
