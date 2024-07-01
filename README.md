@@ -1,24 +1,34 @@
 # Korolev - Moonshot Data Platform
 
-**Commiting ourselves to achieving the goal, before this year is out, of building a high-performance, low-cost petabyte-scale data platform.**
+**Committing ourselves to achieving the goal, before this year is out, of building a high-performance, low-cost petabyte-scale data platform.**
 
-The goal is to build a data platform to perform acquision, peristance, processing and publishing. This system will be a combination of bought and built components, with an emphasis on building a world-class engineering capability to support a world-class, data-led, security function.
+## Introduction
+
+This document outlines the vision, goals, and context for the security data platform. It aims to provide a comprehensive understanding of the platform's objectives, the current data landscape, and the strategic approach we will take to build a world-class data platform.
+
+## Vision and Goals
+
+The goal, in it's simplest terms, is to build a data platform to perform acquisition, persistence, processing, and publishing. This system will be a combination of bought and built components, with an emphasis on building a world-class engineering capability to support a world-class, data-led, security function.
 
 World-class engineering requires world-class problems to organize and measure the best of our skills. We are currently behind where we need to be to achieve these goals, but we do not intend to stay behind and in this year, we shall build foundations to meet our goals and aspirations.
 
-For the division to meet it's objective of helping the organization to go faster safely, it not only needs supporting tools, it needs to grok how the business delivers and creates value; as such, it is imperative the division masters software engineering and shares in this experience along with the business it serves.
+For the division to meet its objective of helping the organization to go faster safely, it not only needs supporting tools but also needs to grok how the business delivers and creates value. As such, it is imperative the division masters software engineering and shares in this experience along with the business it serves.
 
 We chose to be engineering-first, not because it is easy, but because it is hard.
 
 ## Context
 
-The current data landscape consists of disparate systems; providers, processors and consumers are envisioned, maintained and hosted without due consideration of the other components within the environment. Aligning the efforts and expertise from these various systems to achieve unified goals will lead to significantly better outcomes for the owners, engineers and consumers of these systems.
+The current data landscape consists of disparate systems; providers, processors, and consumers are envisioned, maintained, and executed without due consideration of the other components within the ecosystem. Aligning the efforts and expertise from these various systems to achieve unified goals will lead to significantly better outcomes for the owners, engineers, and consumers of these systems.
 
-Each of these systems has fundamental flaws, with much of these systems built rather than designed, or designed with overly restrictive perspectives or motivations. The limitations and flaws in existing systems present a rich opportunity to build a superior, unified platform - built leveraging the lessons hard learnt and earnt from these existing systems.
+Each of these existing systems has fundamental flaws, with much of these systems built rather than designed, or designed with overly restrictive perspectives or motivations. The limitations and flaws in existing systems present a rich opportunity to build a superior, unified platform - built leveraging the lessons hard learnt and earnt from these existing systems.
 
-The organization is currently undergoing an transformation informed by software engineering practices, this however, is from the lens of products. Some of the challenges of this transformation are likely to be eased with the support of a strong engineering capability and culture.
+### Organizational Transformation
 
-A build-over-buy approach gives us a distinct advantage; it decouples our capabilities from commercial vendors and enables us iterate and improve at the pace we can move at limited only by our imagination, and ingenuity and allows us to meet the dynamic needs of the business, rather than following where vendors see a return on investment.
+The organization is currently undergoing a transformation informed by software engineering practices; this, however, is from the lens of products. Some of the challenges of this transformation are likely to be eased with the support of a strong engineering capability and culture.
+
+### Build-over-Buy Approach
+
+A build-over-buy approach gives us a distinct advantage; it decouples our capabilities from commercial vendors and enables us to iterate and improve at the pace we can move at, limited only by our imagination and ingenuity. This approach allows us to keep up with the dynamic and envolvinf needs of the business rather than following where vendors see a return on investment.
 
 ## Design Goals
 
