@@ -28,7 +28,7 @@ The organization is currently undergoing a transformation informed by software e
 
 ### Build-over-Buy Approach
 
-A build-over-buy approach gives us a distinct advantage; it decouples our capabilities from commercial vendors and enables us to iterate and improve at the pace we can move at, limited only by our imagination and ingenuity. This approach allows us to keep up with the dynamic and envolvinf needs of the business rather than following where vendors see a return on investment.
+A build-over-buy approach gives us a distinct advantage; it decouples our capabilities from commercial vendors and enables us to iterate and improve at the pace we can move at, limited only by our imagination and ingenuity. This approach allows us to keep up with the dynamic and envolving needs of the business rather than following where vendors see a return on investment.
 
 ## Design Goals
 
@@ -171,12 +171,12 @@ flowchart TD
     USER(User) --> WB[Analyst Workbench]
     WB --> CATALOG[Data Catalog]
     WB --> BROKER[Data Broker]
-    WB --> PIPE[Pipelines]
+    WB --> PIPE[/Pipelines/]
     PIPE --> BROKER
-    subgraph storage
+    subgraph storage systems
         CATALOG
-        BROKER --> DATA[LTS]
-        BROKER --> BQ[BigQuery]
+        BROKER --> DATA[(Buckets)]
+        BROKER --> BQ[(BigQuery)]
     end
     subgraph consumers
         ESI
@@ -202,9 +202,9 @@ Metadata Catalog facilitating
 - Provenance
 - Change tracking
 
-> Google DataPlex does not support all features
+> Google DataPlex appears to be designed as a governance platform only, with limited appropriateness as an operational data management toolset.
 
-> Iceberg does not adequately support continuous datasets (log streams), which is anticipated as the main data
+> Apache Iceberg does not adequately support continuous datasets (log streams), which is anticipated as the main data
 
 **Data Broker**
 
